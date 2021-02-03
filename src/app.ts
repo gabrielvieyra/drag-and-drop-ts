@@ -4,21 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function mostrarEnPantallaListaDeProyectos() {
-    crearProyecto('proyecto activo', 'active');
-    crearProyecto('proyecto terminado', 'finished');
+    crearProyecto('proyectos activos', 'active');
+    crearProyecto('proyectos terminados', 'finished');
 }
 
 function crearProyecto(titulo: string, id: string) {
     const contenedor = document.querySelector('#app') as HTMLDivElement;
-
-    contenedor.innerHTML += `
-    <section class="projects" id="${id}-projects">
-        <header>
-            <h2>${titulo.toUpperCase()}</h2>
-        </header>
-        <ul id="${id}-projects-list"></ul>
-    </section>
-    `
+    const templateElement = document.querySelector('#project-list') as HTMLTemplateElement;
+    const importarNode = document.importNode(templateElement.content, true);
+    const proyecto = importarNode.firstElementChild as HTMLElement;
+    proyecto.setAttribute('id', `${id}-projects`);
+    const elementosProyecto = proyecto.children;
+    const elementosProyectoHeader = elementosProyecto[0].children;
+    elementosProyectoHeader[0].textContent = `${titulo.toUpperCase()}`;
+    elementosProyecto[1].setAttribute('id', `${id}-projects-list`); 
+    contenedor.appendChild(proyecto);
 }
 
 function mostrarEnPantallaFormulario() {
