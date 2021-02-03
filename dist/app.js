@@ -1,12 +1,31 @@
 "use strict";
 document.addEventListener('DOMContentLoaded', () => {
+    mostrarEnPantallaFormulario();
+    mostrarEnPantallaListaDeProyectos();
+});
+function mostrarEnPantallaListaDeProyectos() {
+    crearProyecto('proyecto activo', 'active');
+    crearProyecto('proyecto terminado', 'finished');
+}
+function crearProyecto(titulo, id) {
+    const contenedor = document.querySelector('#app');
+    contenedor.innerHTML += `
+    <section class="projects" id="${id}-projects">
+        <header>
+            <h2>${titulo.toUpperCase()}</h2>
+        </header>
+        <ul id="${id}-projects-list"></ul>
+    </section>
+    `;
+}
+function mostrarEnPantallaFormulario() {
     const templateElement = document.querySelector('#project-input');
     const contenedor = document.querySelector('#app');
     contenedor.innerHTML = templateElement.innerHTML;
     const formulario = document.querySelector('form');
     formulario.setAttribute('id', 'user-input');
     formulario.addEventListener('submit', enviarFormulario);
-});
+}
 function enviarFormulario(e) {
     e.preventDefault();
     const inputTitulo = document.querySelector('#title');
@@ -16,8 +35,8 @@ function enviarFormulario(e) {
     if (Array.isArray(inputUsuario)) {
         const [titulo, descripcion, gente] = inputUsuario;
         console.log(titulo, descripcion, gente);
+        limpiarInputs(inputTitulo, textAreaDescripcion, inputGente);
     }
-    limpiarInputs(inputTitulo, textAreaDescripcion, inputGente);
 }
 function validarFormulario(inputUno, textArea, inputDos) {
     const validacionTitulo = {
