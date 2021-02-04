@@ -34,8 +34,8 @@ function enviarFormulario(e) {
     const inputGente = document.querySelector('#people');
     const inputUsuario = validarFormulario(inputTitulo, textAreaDescripcion, inputGente);
     if (Array.isArray(inputUsuario)) {
-        const [titulo, descripcion, gente] = inputUsuario;
-        console.log(titulo, descripcion, gente);
+        const [titulo, descripcion, numeroGente] = inputUsuario;
+        agregarProyecto(titulo, descripcion, numeroGente);
         limpiarInputs(inputTitulo, textAreaDescripcion, inputGente);
     }
 }
@@ -86,4 +86,20 @@ function limpiarInputs(inputUno, textArea, inputDos) {
     inputUno.value = '';
     textArea.value = '';
     inputDos.value = '';
+}
+function agregarProyecto(titulo, descripcion, numeroGente) {
+    const listaProyecto = document.querySelector('#active-projects-list');
+    const templateElement = document.querySelector('#single-project');
+    const importarNode = document.importNode(templateElement.content, true);
+    const proyecto = importarNode.firstElementChild;
+    proyecto.children[0].textContent = `${titulo}`;
+    proyecto.children[2].textContent = `${descripcion}`;
+    const numeroGenteProyecto = proyecto.children[1];
+    if (Number(`${numeroGente}`) === 1) {
+        numeroGenteProyecto.textContent = `${numeroGente} persona trabajando`;
+    }
+    else {
+        numeroGenteProyecto.textContent = `${numeroGente} personas trabajando`;
+    }
+    listaProyecto.appendChild(proyecto);
 }
