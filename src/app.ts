@@ -1,3 +1,5 @@
+let proyectos: HTMLElement[] = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     mostrarEnPantallaFormulario();
     mostrarEnPantallaListaDeProyectos();
@@ -39,18 +41,19 @@ function enviarFormulario(e: Event) {
     const inputTitulo = document.querySelector('#title') as HTMLInputElement;
     const textAreaDescripcion = document.querySelector('#description') as HTMLTextAreaElement;
     const inputGente = document.querySelector('#people') as HTMLInputElement;
-    const inputUsuario = validarFormulario(inputTitulo, textAreaDescripcion, inputGente);
+    const id = Math.random();
+    const inputUsuario = validarFormulario(inputTitulo, textAreaDescripcion, inputGente, id);
 
     if(Array.isArray(inputUsuario)) {
-        const [titulo, descripcion, numeroGente] = inputUsuario;
-
-        agregarProyecto(titulo, descripcion, numeroGente);
+        const [titulo, descripcion, numeroGente, id] = inputUsuario;
+       
+        agregarProyecto(titulo, descripcion, numeroGente, id);
         
         limpiarInputs(inputTitulo, textAreaDescripcion, inputGente);
     }
 }
 
-function validarFormulario(inputUno: HTMLInputElement, textArea: HTMLTextAreaElement, inputDos: HTMLInputElement): [string, string, number] | void {
+function validarFormulario(inputUno: HTMLInputElement, textArea: HTMLTextAreaElement, inputDos: HTMLInputElement, id: number): [string, string, number, number] | void {
     const validacionTitulo: Validacion = {
         value: inputUno.value,
         required: true
@@ -73,7 +76,7 @@ function validarFormulario(inputUno: HTMLInputElement, textArea: HTMLTextAreaEle
         alert('Input invalido, por favor intente otra vez!');
         return;
     }else {
-        return [inputUno.value, textArea.value, Number(inputDos.value)];
+        return [inputUno.value, textArea.value, Number(inputDos.value), id];
     }
 }
 
@@ -113,14 +116,15 @@ interface Validacion {
     max?: number;
 }
 
-function agregarProyecto(titulo: string, descripcion: string, numeroGente: number) {
-        const listaProyecto = document.querySelector('#active-projects-list') as HTMLElement;
+function agregarProyecto(titulo: string, descripcion: string, numeroGente: number, id: number) {
         const templateElement = document.querySelector('#single-project') as HTMLTemplateElement;
         const importarNode = document.importNode(templateElement.content, true);
         const proyecto = importarNode.firstElementChild as HTMLElement;
-        proyecto.children[0].textContent = `${titulo}`;
-        proyecto.children[2].textContent = `${descripcion}`;
-        const numeroGenteProyecto = proyecto.children[1];
+        proyecto.setAttribute('id', `${id}`);
+        proyecto.children[0].setAttribute('data-id', `${id}`);
+        proyecto.children[1].textContent = `${titulo}`;
+        proyecto.children[3].textContent = `${descripcion}`;
+        const numeroGenteProyecto = proyecto.children[2];
         
         if(Number(`${numeroGente}`) === 1) {
             numeroGenteProyecto.textContent = `${numeroGente} persona trabajando`;
@@ -128,8 +132,53 @@ function agregarProyecto(titulo: string, descripcion: string, numeroGente: numbe
             numeroGenteProyecto.textContent = `${numeroGente} personas trabajando`;          
         }
 
-        listaProyecto.appendChild(proyecto);
+        proyectos = [...proyectos, proyecto];
+        
+        mostrarProyectosEnPantalla(proyectos);
 }
+
+function mostrarProyectosEnPantalla(proyectos: HTMLElement[]) {
+    const listaProyecto = document.querySelector('#active-projects-list') as HTMLElement;
+
+    proyectos.forEach(proyecto => {
+        listaProyecto.appendChild(proyecto);
+    })
+
+    const contenedorProyectosActivos = document.querySelector('#active-projects-list') as HTMLElement;
+    contenedorProyectosActivos.addEventListener('click', eliminarProyectos);
+};
+
+function eliminarProyectos(e: Event) {
+    const elementosProyecto = e.target as HTMLElement;
+    
+    if(elementosProyecto.classList.contains('material-icons')) {
+        const idProyecto = elementosProyecto.getAttribute('data-id');
+
+        proyectos.forEach(proyecto => {
+            if(proyecto.id === idProyecto) {
+                mostrarProyectosTerminados(proyecto);
+            }
+        })
+        
+        proyectos = proyectos.filter(proyecto => proyecto.id !== idProyecto);
+
+        limpiarPantalla();
+        mostrarProyectosEnPantalla(proyectos);
+    }
+}
+
+function limpiarPantalla() {
+    const listaProyectosActivos = document.querySelector('#active-projects-list') as HTMLElement;
+    listaProyectosActivos.innerHTML = '';
+}
+
+function mostrarProyectosTerminados(proyecto: HTMLElement) {
+    const listaProyectoTerminados = document.querySelector('#finished-projects-list') as HTMLElement;
+    proyecto.children[0].classList.add('esconder');
+
+    listaProyectoTerminados.appendChild(proyecto);
+}
+
 
 
 
