@@ -4,14 +4,21 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Drag & Drop TS</title>
+        <title>Lista de proyectos</title>
+
+        <!-- Material Icons -->
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
+
         <link rel="stylesheet" href="app.css" />
     </head>
     <body>
         <template id="project-input">
             <form>
                 <div class="form-control">
-                    <label for="title">Titulo</label>
+                    <label for="title">Título</label>
                     <input type="text" autocomplete="off" id="title" />
                 </div>
                 <div class="form-control">
@@ -32,7 +39,20 @@
             </form>
         </template>
         <template id="single-project">
-            <li></li>
+            <li>
+                <span class="material-icons"> highlight_off </span>
+                <h2></h2>
+                <h3></h3>
+                <p></p>
+            </li>
+        </template>
+        <template id="project-list">
+            <section class="projects">
+                <header>
+                    <h2 style="text-align: center"></h2>
+                </header>
+                <ul></ul>
+            </section>
         </template>
         <div id="app"></div>
 
