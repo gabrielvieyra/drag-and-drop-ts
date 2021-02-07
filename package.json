@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.6.1"
-  }
+    "@types/sortablejs": "^1.10.6",
+    "lite-server": "^2.6.1",
+    "sortablejs": "^1.13.0"
+  },
+  "dependencies": {}
 }

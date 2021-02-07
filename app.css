@@ -91,6 +91,15 @@ button:active {
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.26);
     padding: 1rem;
     margin: 1rem;
+    background-color: white;
+}
+
+.projects li .material-icons {
+    color: #ff0062;
+    display: block;
+    text-align: right;
+    font-size: 30px;
+    cursor: pointer;
 }
 
 .projects li h2 {
@@ -124,4 +133,8 @@ button:active {
     padding: 1rem;
     border: 1px solid #ff0062;
     background: #f7f7f7;
+}
+
+.esconder {
+    display: none !important;
 }
